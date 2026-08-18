@@ -1,0 +1,43 @@
+# PR Scheduler settings — copy this file to .github/pr-scheduler.yml
+#
+# Every setting is optional; the values below are the defaults.
+
+# The word that starts a command in a pull request comment.
+trigger: "@prscheduler"
+
+# Timezone used when a comment does not name one. Accepts UTC, an IANA name
+# such as Europe/London, or a fixed offset such as GMT+5.
+timezone: UTC
+
+# How scheduled pull requests are merged: merge, squash or rebase.
+merge-method: merge
+
+# Delete the head branch after a scheduled merge.
+delete-branch: false
+
+# Only merge when checks are passing. A pull request with failing or running
+# checks is retried until the grace period below runs out.
+require-checks: true
+
+# Only merge when the pull request has an approving review and no outstanding
+# request for changes.
+require-approval: false
+
+# Repository permission needed to schedule a merge: read, triage, write,
+# maintain or admin. Anything below `write` lets people merge code they could
+# not merge by hand — think before lowering it.
+minimum-permission: write
+
+# Label used to track scheduled pull requests. Created automatically.
+label: scheduled-merge
+label-color: "0e8a16"
+
+# How long to keep retrying a due merge that is not ready yet, in minutes.
+grace-period-minutes: 120
+
+# The furthest ahead a merge may be scheduled, in days.
+max-schedule-days: 365
+
+# Post status comments, and react to commands.
+comment: true
+reactions: true

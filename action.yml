@@ -1,0 +1,77 @@
+name: 'PR Scheduler'
+description: 'Schedule pull requests to merge at a specific date and time, with a comment.'
+author: 'jaydenireland'
+
+branding:
+  icon: 'clock'
+  color: 'green'
+
+inputs:
+  token:
+    description: 'Token used to read comments and merge pull requests.'
+    required: false
+    default: ${{ github.token }}
+  mode:
+    description: >-
+      Which job to do: `auto` (pick from the event), `comment` (read a command),
+      `sweep` (merge everything that is due) or `closed` (clear a dropped schedule).
+    required: false
+    default: 'auto'
+  trigger:
+    description: 'Word that starts a command. Defaults to `@prscheduler`.'
+    required: false
+    default: ''
+  timezone:
+    description: 'Timezone used when a comment does not name one. Defaults to `UTC`.'
+    required: false
+    default: ''
+  merge-method:
+    description: 'Default merge method: `merge`, `squash` or `rebase`.'
+    required: false
+    default: ''
+  delete-branch:
+    description: 'Delete the head branch after a scheduled merge.'
+    required: false
+    default: ''
+  require-checks:
+    description: 'Only merge when checks are passing. Defaults to `true`.'
+    required: false
+    default: ''
+  require-approval:
+    description: 'Only merge when the pull request has an approving review.'
+    required: false
+    default: ''
+  minimum-permission:
+    description: 'Repository permission needed to schedule a merge. Defaults to `write`.'
+    required: false
+    default: ''
+  label:
+    description: 'Label used to track scheduled pull requests.'
+    required: false
+    default: ''
+  grace-period-minutes:
+    description: 'How long to keep retrying a due merge that is not ready yet.'
+    required: false
+    default: ''
+  max-schedule-days:
+    description: 'Furthest ahead a merge may be scheduled.'
+    required: false
+    default: ''
+  dry-run:
+    description: 'Log what would happen without commenting, labelling or merging.'
+    required: false
+    default: 'false'
+
+outputs:
+  action:
+    description: 'What the run did — for example `scheduled`, `cancelled` or `sweep`.'
+  scheduled-for:
+    description: 'ISO-8601 time a comment scheduled the merge for.'
+  merged:
+    description: 'JSON array of pull request numbers merged by a sweep.'
+  processed:
+    description: 'How many scheduled pull requests a sweep looked at.'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'

@@ -1,0 +1,37 @@
+{
+  "name": "pr-scheduler-gratis",
+  "version": "1.0.0",
+  "description": "Schedule pull requests to merge at a specific date and time, with a comment. A free, self-hosted recreation of the PR Scheduler GitHub App.",
+  "main": "dist/index.js",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "ncc build src/main.js -o dist --license licenses.txt",
+    "test": "node --test \"test/**/*.test.js\"",
+    "lint": "node --check src/main.js",
+    "all": "npm run test && npm run build"
+  },
+  "keywords": [
+    "github-actions",
+    "pull-request",
+    "scheduler",
+    "merge",
+    "automation",
+    "cron"
+  ],
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "js-yaml": "^4.1.0"
+  },
+  "devDependencies": {
+    "@vercel/ncc": "^0.38.3"
+  },
+  "overrides": {
+    "undici": "^6.28.0"
+  }
+}

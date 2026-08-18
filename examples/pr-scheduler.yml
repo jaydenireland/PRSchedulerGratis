@@ -1,0 +1,40 @@
+# PR Scheduler — copy this file to .github/workflows/pr-scheduler.yml
+#
+# Then comment `@prscheduler 26/08/2026T11:05` on any pull request.
+name: PR Scheduler
+
+on:
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [closed]
+  schedule:
+    # How often to check for pull requests that are due. GitHub runs cron jobs
+    # on a best-effort basis, so a merge happens on the first sweep at or after
+    # its scheduled time — not to the second.
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write        # merge the pull request and delete the head branch
+  pull-requests: write   # read pull request state
+  issues: write          # comment, react and label
+  checks: read           # see whether checks passed
+  statuses: read         # see legacy commit statuses
+
+concurrency:
+  # One run at a time per pull request, so two sweeps cannot both merge it.
+  group: pr-scheduler-${{ github.event.issue.number || github.event.pull_request.number || 'sweep' }}
+  cancel-in-progress: false
+
+jobs:
+  scheduler:
+    # Skip comments on plain issues; only pull requests can be merged.
+    if: github.event_name != 'issue_comment' || github.event.issue.pull_request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: jaydenireland/PRSchedulerGratis@v1
+        with:
+          # Optional — everything can also live in .github/pr-scheduler.yml
+          merge-method: squash
+          require-checks: true
